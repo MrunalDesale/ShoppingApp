@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="contentviewmodeldata"
+            type="com.shoppingpad.viewmodel.ContentViewModelData"/>
+    </data>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.github.siyamed.shapeimageview.CircularImageView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="40dp"
+    android:layout_height="60dp"
+    android:src="@drawable/user"
+    android:id="@+id/mainIcon"
+    app:siBorderColor="#fff"
+    app:imageUrl="@{contentviewmodeldata.mMainIcon}"
+    android:layout_alignBottom="@+id/shareIcon" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mainTitle"
+        android:layout_toRightOf="@+id/mainIcon"
+        android:text="@{contentviewmodeldata.mMainTitle}"
+        android:paddingLeft="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/statusTitle"
+        android:text="@{contentviewmodeldata.mStatusTitle}"
+        android:paddingLeft="5dp"
+        android:layout_below="@+id/mainTitle"
+        android:textColor="@android:color/black"
+        android:textSize="11sp"
+        android:layout_toRightOf="@+id/mainIcon" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timeTitle"
+        android:text="@{contentviewmodeldata.mTimeTitle}"
+        android:layout_below="@+id/mainTitle"
+        android:paddingLeft="5dp"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="13sp"
+        android:layout_toRightOf="@+id/statusTitle"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/viewTitle"
+        android:text="@{contentviewmodeldata.mViewTitle}"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/shareIcon"
+        android:layout_toLeftOf="@+id/shareIcon"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="13sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/partTitle"
+        android:text="@{contentviewmodeldata.mPartTitle}"
+        android:layout_alignBottom="@+id/timeTitle"
+        android:layout_toStartOf="@+id/shareIcon"
+        android:textColor="@android:color/darker_gray"
+        android:layout_toLeftOf="@+id/shareIcon"
+        android:textSize="13sp" />
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:id="@+id/shareIcon"
+        android:src="@drawable/share"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>
+</layout>

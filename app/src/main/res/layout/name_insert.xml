@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#d0d0d0"
+    android:theme="@style/Temp"
+    >
+    <include
+        android:id="@+id/app_bar2"
+        layout="@layout/app_bar2"
+        />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/boy_logo"
+        android:id="@+id/profilePic"
+        android:layout_above="@+id/name"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="43dp" />
+
+    <TextView
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/Message3"
+        android:text="@string/name"
+        android:textColor="#000"
+        android:layout_alignBottom="@+id/profilePic"
+        android:layout_toEndOf="@+id/profilePic"
+        android:layout_marginBottom="61dp" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/name"
+        android:textColor="#000"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="221dp" />
+</RelativeLayout>
