@@ -1,12 +1,14 @@
 package com.shoppingpad.viewmodel;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.shoppingpad.R;
 import com.shoppingpad.controller.ContentListController;
 import com.shoppingpad.model.ContentInfoModel;
 import com.shoppingpad.model.ContentViewsModel;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,12 +65,16 @@ public class ContentViewModelHandler {
                     getContentViewsModelList().get(i);
 
             //Binds all elements using Observable ViewModelData...
+
             contentViewModelData.setmMainTitle(contentInfoModel.mContentType);
             contentViewModelData.setmStatusTitle(contentInfoModel.mDisplayName);
             contentViewModelData.setmPartTitle(contentViewsModel.mNumberOfParticipant);
             contentViewModelData.setmViewTitle(contentViewsModel.mNoOfViews);
             contentViewModelData.setmPartTitle(contentViewsModel.mFirstName);
             contentViewModelData.setmTimeTitle(contentViewsModel.mLastViewedDateTime);
+
+            String profilePicUrl=contentViewsModel.mDisplayProfile;
+            contentViewModelData.setmMainIcon(profilePicUrl);
 
             //Code to test contents are setting without using set method...
 //            contentViewModelData.mMainTitle = contentInfoModel.mContentType;
@@ -78,9 +84,9 @@ public class ContentViewModelHandler {
 //            contentViewModelData.mPartTitle = contentViewsModel.mFirstName;
 
             //Set an image fetched from given url...
-            String url="http://www.hdpicswale.in/assets/upload/bollywood-wallpapers/" +
-                    "farhan-akhtar-307/farhan-akhtar-latest-stills-7566.jpeg";
-            contentViewModelData.setmMainIcon(url);
+//            String url="http://www.hdpicswale.in/assets/upload/bollywood-wallpapers/" +
+//                    "farhan-akhtar-307/farhan-akhtar-latest-stills-7566.jpeg";
+//            contentViewModelData.setmMainIcon(url);
             contentViewModelData.mShareIcon = R.drawable.share;
 
             //Add ViewModel object to list that is passed to adapter...
@@ -88,8 +94,8 @@ public class ContentViewModelHandler {
         }
         return resultList;
     }
-    //Code for connection between ViewModel and View...
 
+    //Code for connection between ViewModel and View...
     public List<ContentViewModelData> getDummyData(){
 
         List<ContentViewModelData> reqData=new ArrayList<>();

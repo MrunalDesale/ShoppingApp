@@ -46,15 +46,18 @@ public class RegistrationViewModelHandler {
 
         //Get OTP
         int otp=getOtp();
-        sendSms(phoneNo, otp, context);
+
+        //Send SMS to that mobile number...
+//        sendSms(phoneNo, otp, context);
+
+        //Set OTP to EditText...
         textV1.setText("" + otp);
 
-        String num=textV1.getText().toString();
-        if(num.equals(otp))
-            Log.e("true","true");
-
-        else
-            Log.e("false","false");
+//        String num=textV1.getText().toString();
+//        if(num.equals(otp))
+//            Log.e("true","true");
+//        else
+//            Log.e("false","false");
     }
 
     //Sending SMS code...

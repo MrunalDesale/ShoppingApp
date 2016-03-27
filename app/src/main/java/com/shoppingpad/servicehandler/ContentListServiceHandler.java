@@ -14,7 +14,6 @@ public class ContentListServiceHandler {
     public JSONArray mViewJsonArray;
     public JSONArray mInfoJsonArray;
 
-    int code = 0;
     public JSONArray getmInfoJsonArray() {
         //Code to get json data of content info
 
@@ -33,11 +32,5 @@ public class ContentListServiceHandler {
         mViewJsonArray=jsonParser.getJSONFromUrl(viewUrl);
 
         return mViewJsonArray;
-    }
-
-    public int generateOtp(){
-        //Generate 6 digits OTP
-        Random ran=new Random();
-        return (code= (100000 + ran.nextInt(900000)));
     }
 }

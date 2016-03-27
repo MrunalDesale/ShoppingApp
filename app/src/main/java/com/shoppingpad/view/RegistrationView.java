@@ -3,6 +3,7 @@ package com.shoppingpad.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shoppingpad.R;
+import com.shoppingpad.databinding.NameInsertBinding;
+import com.shoppingpad.databinding.RegistrationBinding;
 import com.shoppingpad.util.VerifyNumberFormat;
 import com.shoppingpad.viewmodel.RegistrationViewModelHandler;
 
@@ -52,6 +55,11 @@ public class RegistrationView extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Create binding object...
+        final RegistrationBinding registrationBinding= DataBindingUtil.setContentView(
+                this,R.layout.name_insert);
+
+        //Set registration layout...
         setContentView(R.layout.registration);
         mVerificationResult=false;
 
@@ -110,7 +118,10 @@ public class RegistrationView extends AppCompatActivity{
                                 @Override
                                 public void onClick(View v) {
                                     nm = String.valueOf(mNameEditText.getText());
-                                    new RegistrationAsync().execute(no,nm);
+                                    User user=new User(nm,no);
+                                    registrationBinding.setUser(user);
+                                    new RegistrationAsync().execute(user.
+                                            getmMobileNo(),user.getmUserName());
                                 }
                             });
                         }
