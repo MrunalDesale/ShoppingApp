@@ -41,6 +41,7 @@ public class ContentListController {
     public List<ContentViewsModel> mContentViewsModelList;
     public List <ContentViewModelData> mContentViewModelDataList;
 
+    public List <ContentInfoModel> contentInfoModelList;
     ContentListLocalDB mLocalDB;
 
     public ContentListController(Context context){
@@ -93,27 +94,42 @@ public class ContentListController {
 
     //Method to get list of ContentInfo and ContentView from json...
     public List<ContentInfoModel> getInfoModelList(){
-        return mContentInfoModelList=getContentInfoJson();
+        try {
+            mContentInfoModelList=getContentInfoJson();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return mContentInfoModelList;
     }
     public List<ContentViewsModel> getContentViewsModelList(){
-        return mContentViewsModelList=getContentViewsJson();
+        try{
+            mContentViewsModelList=getContentViewsJson();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return mContentViewsModelList;
     }
 
     //Method to get Content info json data from service handler....
     public List<ContentInfoModel> getContentInfoJson(){
-        List <ContentInfoModel> contentInfoModelList=new ArrayList<>();
+
+        try {
+        contentInfoModelList=new ArrayList<>();
         JSONArray infoJsonArray=mContentListServiceHandler.getmInfoJsonArray();
 
         //Get service handlers Info list that contains Info data retrieved from Json
         for (int i=0;i<infoJsonArray.length();i++){
-            try {
+
                 ContentInfoModel contentInfoModel = new ContentInfoModel();
                 JSONObject jsonObject = infoJsonArray.getJSONObject(i);
                 contentInfoModel.populateDummyData(jsonObject);
                 contentInfoModelList.add(contentInfoModel);
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
         }
         return contentInfoModelList;
     }

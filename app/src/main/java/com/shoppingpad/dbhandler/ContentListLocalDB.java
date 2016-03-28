@@ -88,6 +88,7 @@ public class ContentListLocalDB extends SQLiteOpenHelper{
 
     public ContentListLocalDB(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        db=getWritableDatabase();
         Log.e("db constructor","db constructor");
         this.context=context;
     }

@@ -84,6 +84,7 @@ public class RegistrationView extends AppCompatActivity{
             public void onClick(View v) {
 
                 mVerifyNumberFormat=new VerifyNumberFormat();
+
                 //Get mobile number from EditText...
                 no = String.valueOf(mPhoneNumber.getText());
                 mPhoneNo=no;
@@ -117,7 +118,11 @@ public class RegistrationView extends AppCompatActivity{
                                 public void onClick(View v) {
                                     nm = String.valueOf(mNameEditText.getText());
                                     User user=new User(nm,no);
+
+                                    //Set user details using binding...
                                     registrationBinding.setUser(user);
+
+                                    //Call async task...
                                     new RegistrationAsync().execute(user.
                                             getmMobileNo(),user.getmUserName());
                                 }
@@ -145,10 +150,15 @@ public class RegistrationView extends AppCompatActivity{
         protected void onPostExecute(String s) {
 
             super.onPostExecute(s);
-            Toast.makeText(RegistrationView.this, ""+mResponse, Toast.LENGTH_SHORT)
+            if(mResponse != null)
+                Toast.makeText(RegistrationView.this, ""+mResponse, Toast.LENGTH_SHORT)
                                                                 .show();
+            else
+                Toast.makeText(RegistrationView.this, "Internet connection " +
+                        "unavailable.", Toast.LENGTH_SHORT).show();
+
             //Start next activity...
-            startActivity(new Intent(RegistrationView.this,ContentListView.class));
+            startActivity(new Intent(RegistrationView.this, ContentListView.class));
         }
     }
 }

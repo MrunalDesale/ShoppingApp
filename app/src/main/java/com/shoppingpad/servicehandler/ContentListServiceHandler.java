@@ -12,6 +12,7 @@ import java.util.Random;
  * 2.It also return data to model.
  */
 public class ContentListServiceHandler {
+    //7889455678
 
     public JSONArray mViewJsonArray;
     public JSONArray mInfoJsonArray;
