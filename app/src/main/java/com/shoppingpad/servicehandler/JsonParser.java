@@ -26,11 +26,11 @@ public class JsonParser {
     public JsonParser(){
 
     }
-    public JSONArray getJSONFromUrl(String infoUrl)
+    public JSONArray getJSONFromUrl(String newUrl)
     {
         mBuffer=new StringBuffer();
         try {
-            URL url = new URL(infoUrl);
+            URL url = new URL(newUrl);
 
             //Establish connection and open url connection
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();

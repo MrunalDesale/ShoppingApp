@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shoppingpad.R;
-import com.shoppingpad.databinding.NameInsertBinding;
 import com.shoppingpad.databinding.RegistrationBinding;
 import com.shoppingpad.util.VerifyNumberFormat;
 import com.shoppingpad.viewmodel.RegistrationViewModelHandler;
@@ -51,13 +50,12 @@ public class RegistrationView extends AppCompatActivity{
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Create binding object...
         final RegistrationBinding registrationBinding= DataBindingUtil.setContentView(
-                this,R.layout.name_insert);
+                this,R.layout.registration);
 
         //Set registration layout...
         setContentView(R.layout.registration);
@@ -149,6 +147,7 @@ public class RegistrationView extends AppCompatActivity{
             super.onPostExecute(s);
             Toast.makeText(RegistrationView.this, ""+mResponse, Toast.LENGTH_SHORT)
                                                                 .show();
+            //Start next activity...
             startActivity(new Intent(RegistrationView.this,ContentListView.class));
         }
     }

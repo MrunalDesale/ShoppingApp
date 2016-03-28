@@ -91,11 +91,6 @@ public class ContentListController {
         return generateOtp();
     }
 
-    //Return result of number format...
-    public boolean returnResult(){
-        return result;
-    }
-
     //Method to get list of ContentInfo and ContentView from json...
     public List<ContentInfoModel> getInfoModelList(){
         return mContentInfoModelList=getContentInfoJson();
