@@ -60,7 +60,7 @@ public class ContentListController {
             mContentListServiceHandler=new ContentListServiceHandler();
 
             //Call to populate database...
-            populateDatabase();
+//            populateDatabase();
         }
     }
 
