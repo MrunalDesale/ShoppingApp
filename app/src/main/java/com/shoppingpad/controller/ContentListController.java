@@ -1,6 +1,7 @@
 package com.shoppingpad.controller;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.shoppingpad.R;
 import com.shoppingpad.dbhandler.ContentListLocalDB;
@@ -41,7 +42,6 @@ public class ContentListController {
     public List<ContentViewsModel> mContentViewsModelList;
     public List <ContentViewModelData> mContentViewModelDataList;
 
-    public List <ContentInfoModel> contentInfoModelList;
     ContentListLocalDB mLocalDB;
 
     public ContentListController(Context context){
@@ -94,31 +94,17 @@ public class ContentListController {
 
     //Method to get list of ContentInfo and ContentView from json...
     public List<ContentInfoModel> getInfoModelList(){
-        try {
-            mContentInfoModelList=getContentInfoJson();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        return mContentInfoModelList;
+        return mContentInfoModelList=getContentInfoJson();
     }
     public List<ContentViewsModel> getContentViewsModelList(){
-        try{
-            mContentViewsModelList=getContentViewsJson();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        return mContentViewsModelList;
+        return mContentViewsModelList=getContentViewsJson();
     }
 
     //Method to get Content info json data from service handler....
     public List<ContentInfoModel> getContentInfoJson(){
-
-        try {
-        contentInfoModelList=new ArrayList<>();
+        List <ContentInfoModel> contentInfoModelList=new ArrayList<>();
         JSONArray infoJsonArray=mContentListServiceHandler.getmInfoJsonArray();
-
+        try {
         //Get service handlers Info list that contains Info data retrieved from Json
         for (int i=0;i<infoJsonArray.length();i++){
 
@@ -127,8 +113,7 @@ public class ContentListController {
                 contentInfoModel.populateDummyData(jsonObject);
                 contentInfoModelList.add(contentInfoModel);
             }
-        }
-        catch (JSONException e) {
+        }catch (JSONException e) {
             e.printStackTrace();
         }
         return contentInfoModelList;

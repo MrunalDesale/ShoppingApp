@@ -20,15 +20,14 @@ import java.net.URL;
 
 public class JsonParser {
 
-    InputStream mInputStream;
-    StringBuffer mBuffer;
-    JSONArray mJArray;
     public JsonParser(){
 
     }
     public JSONArray getJSONFromUrl(String newUrl)
     {
-        mBuffer=new StringBuffer();
+        InputStream mInputStream;
+        StringBuffer mBuffer=new StringBuffer();
+        JSONArray mJArray = null;
         try {
             URL url = new URL(newUrl);
 

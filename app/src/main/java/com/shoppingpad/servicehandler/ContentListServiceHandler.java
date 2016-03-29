@@ -1,25 +1,20 @@
 package com.shoppingpad.servicehandler;
 
+import android.util.Log;
+
 import org.json.JSONArray;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Random;
-
 /**
  * Created by bridgelabz3 on 13/3/16.
  * 1.This class fetches data from server and return that data to controller.
  * 2.It also return data to model.
  */
 public class ContentListServiceHandler {
-    //7889455678
 
     public JSONArray mViewJsonArray;
     public JSONArray mInfoJsonArray;
 
     public JSONArray getmInfoJsonArray() {
         //Code to get json data of content info
-
         String infoUrl="http://54.86.64.100:3000/api/v4/content/info";
 
         JsonParser jsonParser1 = new JsonParser();

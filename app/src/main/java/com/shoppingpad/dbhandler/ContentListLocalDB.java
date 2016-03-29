@@ -23,8 +23,8 @@ public class ContentListLocalDB extends SQLiteOpenHelper{
     SQLiteDatabase db;
     Context context;
 
-    public static final String DB_NAME="ShoppingAppDatabase";
-    public static final int DB_VERSION=2;
+    public static final String DB_NAME="ShoppingAppDB";
+    public static final int DB_VERSION=1;
     public static final String TABLE_NAME="ShoppingApp";
     public static final String CONTENT_INFO_TABLE="ContentInfo";
     public static final String CONTENT_VIEW_TABLE="ContentView";
