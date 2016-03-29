@@ -124,7 +124,10 @@ public class RegistrationView extends AppCompatActivity{
 
                                     //Call async task...
                                     new RegistrationAsync().execute(user.
-                                            getmMobileNo(),user.getmUserName());
+                                            getmMobileNo(), user.getmUserName());
+                                    //Start next activity...
+//                                    startActivity(new Intent(RegistrationView.this,
+//                                            ContentListView.class));
                                 }
                             });
                         }
@@ -156,9 +159,6 @@ public class RegistrationView extends AppCompatActivity{
             else
                 Toast.makeText(RegistrationView.this, "Internet connection " +
                         "unavailable.", Toast.LENGTH_SHORT).show();
-
-            //Start next activity...
-            startActivity(new Intent(RegistrationView.this, ContentListView.class));
         }
     }
 }

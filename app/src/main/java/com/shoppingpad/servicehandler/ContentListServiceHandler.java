@@ -15,7 +15,7 @@ public class ContentListServiceHandler {
 
     public JSONArray getmInfoJsonArray() {
         //Code to get json data of content info
-        String infoUrl="http://54.86.64.100:3000/api/v4/content/info";
+        String infoUrl="http://54.86.64.100:3000/api/v1/content/content-info";
 
         JsonParser jsonParser1 = new JsonParser();
         mInfoJsonArray=jsonParser1.getJSONFromUrl(infoUrl);
@@ -24,7 +24,7 @@ public class ContentListServiceHandler {
 
     public JSONArray getmViewJsonArray() {
         //Code to get json data of content view
-        String viewUrl="http://54.86.64.100:3000/api/v4/content/View";
+        String viewUrl="http://54.86.64.100:3000/api/v1/content/user-content-view";
 
         JsonParser jsonParser = new JsonParser();
         mViewJsonArray=jsonParser.getJSONFromUrl(viewUrl);

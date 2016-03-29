@@ -32,7 +32,6 @@ public class ContentListController {
 
     public static final boolean IS_UNIT_TEST = false;
     int code=0;
-    boolean result;
 
 
     public ContentListServiceHandler mContentListServiceHandler;
@@ -81,9 +80,8 @@ public class ContentListController {
 
     public int generateOtp(){
         //Generate 6 digits OTP
-        int otp=0;
         Random ran=new Random();
-        otp=code= (100000 + ran.nextInt(900000));
+        int otp=code= (100000 + ran.nextInt(900000));
         return otp;
     }
 
@@ -105,6 +103,7 @@ public class ContentListController {
         List <ContentInfoModel> contentInfoModelList=new ArrayList<>();
         JSONArray infoJsonArray=mContentListServiceHandler.getmInfoJsonArray();
         try {
+
         //Get service handlers Info list that contains Info data retrieved from Json
         for (int i=0;i<infoJsonArray.length();i++){
 
@@ -113,8 +112,13 @@ public class ContentListController {
                 contentInfoModel.populateDummyData(jsonObject);
                 contentInfoModelList.add(contentInfoModel);
             }
-        }catch (JSONException e) {
+        }
+        catch (JSONException e) {
             e.printStackTrace();
+        }
+        Log.e("info list size",""+mContentInfoModelList.size());
+        for(int i=0 ;i<mContentInfoModelList.size();i++){
+            mLocalDB.insertInfoContentData(mContentInfoModelList.get(i));
         }
         return contentInfoModelList;
     }
@@ -137,6 +141,10 @@ public class ContentListController {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+        Log.e("view list size",""+mContentViewsModelList.size());
+        for(int i=0;i<mContentViewsModelList.size();i++){
+            mLocalDB.insertViewContentData(mContentViewsModelList.get(i));
         }
         return contentViewsModelList;
     }

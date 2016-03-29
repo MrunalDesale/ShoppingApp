@@ -39,7 +39,7 @@ public class RegistrationServiceHandler {
                     .encode(mName, "UTF-8");
 
             //Url on which data is to be posted...
-            mUrl = new URL("http://54.86.64.100:3000/api/v1/user_post/mobile/"+
+            mUrl = new URL("http://54.86.64.100:3000/api/v1/user/mobile/"+
                     mPhoneNo+"/"+mName);
             OutputStreamWriter outputStream;
 

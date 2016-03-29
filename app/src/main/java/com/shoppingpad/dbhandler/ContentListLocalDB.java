@@ -137,7 +137,7 @@ public class ContentListLocalDB extends SQLiteOpenHelper{
                                String url,String displayName,String imagesLink,
                                String contentLink,String description,String syncDateTime,
                                String createdAt,String modifiedAt){
-        db=getWritableDatabase();
+//        db=getWritableDatabase();
         ContentValues contentValues=new ContentValues();
             contentValues.put(MODIFIED_AT,modifiedAt);
             contentValues.put(CREATED_AT,createdAt);
@@ -161,7 +161,7 @@ public class ContentListLocalDB extends SQLiteOpenHelper{
                                lastViewedDateTime,String numberOfViews,String
                                numberofparticipant,String action){
 
-        db=getWritableDatabase();
+//        db=getWritableDatabase();
         ContentValues contentValues=new ContentValues();
 
         contentValues.put(NO_OF_VIEWS,numberOfViews);

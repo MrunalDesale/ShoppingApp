@@ -53,8 +53,10 @@ public class ContentViewModelHandler {
 
     public List<ContentViewModelData> populateData(){
 
+        int infoListSize=mContentListController.getInfoModelList().size();
+
         //Set one by one content using json data...
-        for (int i=0;i<mContentListController.getInfoModelList().size();i++) {
+        for (int i=0;i<infoListSize;i++) {
 
             ContentViewModelData contentViewModelData = new ContentViewModelData();
 
