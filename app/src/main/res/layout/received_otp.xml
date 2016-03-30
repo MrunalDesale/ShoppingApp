@@ -24,7 +24,9 @@
         android:id="@+id/OTP"
         android:layout_below="@+id/otpText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="50dp" >
+        <requestFocus/>
+    </EditText>
 
     <Button
         android:layout_width="wrap_content"

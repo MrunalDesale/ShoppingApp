@@ -84,7 +84,9 @@
             <EditText
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/countryCode" />
+                android:id="@+id/countryCode">
+                <requestFocus/>
+            </EditText>
 
             <EditText
                 android:id="@+id/phone_number"

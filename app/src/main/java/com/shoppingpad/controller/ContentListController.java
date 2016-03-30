@@ -2,7 +2,6 @@ package com.shoppingpad.controller;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.shoppingpad.R;
 import com.shoppingpad.dbhandler.ContentListLocalDB;

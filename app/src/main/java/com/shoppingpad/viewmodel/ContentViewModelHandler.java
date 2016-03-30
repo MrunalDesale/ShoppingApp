@@ -123,10 +123,7 @@ public class ContentViewModelHandler {
 //            contentViewModelData.mTimeTitle = contentViewsModel.mLastViewedDateTime;
 //            contentViewModelData.mPartTitle = contentViewsModel.mFirstName;
 
-                //Set an image fetched from given url...
-//            String url="http://www.hdpicswale.in/assets/upload/bollywood-wallpapers/" +
-//                    "farhan-akhtar-307/farhan-akhtar-latest-stills-7566.jpeg";
-//            contentViewModelData.setmMainIcon(url);
+                //Set share icon...
                 contentViewModelData.mShareIcon = R.drawable.share;
 
                 //Add ViewModel object to list that is passed to adapter...
@@ -139,8 +136,8 @@ public class ContentViewModelHandler {
     //Following method checks whether internet connection is available in emulator
     //Return true if internet is available
     private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager= (ConnectivityManager)context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }

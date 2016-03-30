@@ -110,6 +110,7 @@ public class RegistrationView extends AppCompatActivity{
                             //Set layout of Insert name...
                             setContentView(R.layout.name_insert);
                             mNameEditText = (EditText) findViewById(R.id.name);
+
                             mNext= (Button) findViewById(R.id.next);
 
                             //On click event of next button to proceed...
