@@ -177,6 +177,7 @@ public class ContentListController {
         return contentViewModelDataList;
     }
 
+    //Get info data from database...
     public List<ContentInfoModel> getInfoDatabase(){
 
         Cursor infoCursor=mLocalDB.getContentInfoData();
@@ -197,6 +198,7 @@ public class ContentListController {
         return contentInfoModelList;
     }
 
+    //Get view data from database...
     public List <ContentViewsModel> getViewDatabase(){
         Cursor viewCursor=mLocalDB.getContentViewData();
         JSONArray viewJsonArray=cursorToJson(viewCursor);
@@ -217,6 +219,7 @@ public class ContentListController {
         return contentViewsModelList;
     }
 
+    //This method converts cursor data to json format...
     public JSONArray cursorToJson(Cursor cursor){
 
         JSONArray result = new JSONArray();
@@ -227,6 +230,7 @@ public class ContentListController {
         //isAfterLast() returns whether cursor is pointing to position after last row
         while (!cursor.isAfterLast()) {
 
+            //Get number of columns in cursor...
             int columnCount = cursor.getColumnCount();
             JSONObject rowObj = new JSONObject();
 
@@ -246,6 +250,7 @@ public class ContentListController {
             cursor.moveToNext();
         }
         cursor.close();
+        //return resultant json array...
         return result;
     }
 }

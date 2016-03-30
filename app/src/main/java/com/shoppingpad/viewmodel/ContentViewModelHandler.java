@@ -136,6 +136,8 @@ public class ContentViewModelHandler {
         return resultList;
     }
 
+    //Following method checks whether internet connection is available in emulator
+    //Return true if internet is available
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
