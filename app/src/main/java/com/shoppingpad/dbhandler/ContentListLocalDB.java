@@ -23,7 +23,7 @@ public class ContentListLocalDB extends SQLiteOpenHelper{
     SQLiteDatabase db;
     Context context;
 
-    public static final String DB_NAME="ShoppingAppDB";
+    public static final String DB_NAME="ShoppingAppDatabase";
     public static final int DB_VERSION=1;
     public static final String TABLE_NAME="ShoppingApp";
     public static final String CONTENT_INFO_TABLE="ContentInfo";
@@ -37,31 +37,31 @@ public class ContentListLocalDB extends SQLiteOpenHelper{
     public static final String TIME="Time";
 
     //Table attributes of ContentInfo table
-    public static final String MODIFIED_AT="Modified_at";
-    public static final String CREATED_AT="Created_at";
-    public static final String SYNC_DATE_TIME="Sync_date_time";
-    public static final String DESCRIPTION="Description";
-    public static final String CONTENT_LINK="Content_link";
-    public static final String IMAGES_LINK="Images_link";
-    public static final String DISPLAY_NAME="Display_name";
-    public static final String URL="Url";
-    public static final String TITLE1="Title";
-    public static final String CONTENT_TYPE="Content_type";
-    public static final String CONTENT_ID="Content_id";
+    public static final String MODIFIED_AT="modified_at";
+    public static final String CREATED_AT="created_at";
+    public static final String SYNC_DATE_TIME="syncDateTime";
+    public static final String DESCRIPTION="decription";
+    public static final String CONTENT_LINK="contentLink";
+    public static final String IMAGES_LINK="imagesLink";
+    public static final String DISPLAY_NAME="display_name";
+    public static final String URL="url";
+    public static final String TITLE1="title";
+    public static final String CONTENT_TYPE="contentType";
+    public static final String CONTENT_ID="content_id";
 
     //Table attributes of ContentView table
-    public static final String NO_OF_VIEWS="No_of_views";
-    public static final String LAST_VIEWED_DATE_TIME="Last_viewed_date_time";
-    public static final String DISPLAY_PROFILE="Display_profile";
-    public static final String EMAIL="Email";
-    public static final String ACTION="Action";
-    public static final String NO_OF_PARTICIPANTS="No_of_participants";
-    public static final String LAST_NAME="Last_name";
-    public static final String FIRST_NAME="First_name";
-    public static final String USER_ID="User_id";
-    public static final String CONTENT_ID1="Content_id";
-    public static final String USER_ADMIN_ID="User_admin_id";
-    public static final String USER_CONTENT_ID="User_content_id";
+    public static final String NO_OF_VIEWS="numberOfViews";
+    public static final String LAST_VIEWED_DATE_TIME="lastViewedDateTime";
+    public static final String DISPLAY_PROFILE="displayProfile";
+    public static final String EMAIL="email";
+    public static final String ACTION="action";
+    public static final String NO_OF_PARTICIPANTS="numberofparticipant";
+    public static final String LAST_NAME="lastName";
+    public static final String FIRST_NAME="firstName";
+    public static final String USER_ID="userId";
+    public static final String CONTENT_ID1="contentId";
+    public static final String USER_ADMIN_ID="userAdminId";
+    public static final String USER_CONTENT_ID="userContentId";
 
     //Query to create Dummy table...
     public static final String CREATE_QUERRY="CREATE TABLE "+TABLE_NAME+"("+
@@ -89,7 +89,6 @@ public class ContentListLocalDB extends SQLiteOpenHelper{
     public ContentListLocalDB(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         db=getWritableDatabase();
-        Log.e("db constructor","db constructor");
         this.context=context;
     }
 
@@ -133,23 +132,23 @@ public class ContentListLocalDB extends SQLiteOpenHelper{
     }
 
     //Method that insert data fetched from json to table
-    public void insertInfoData(String contentId, String contentType,String title,
+    public void insertInfoData(String content_id, String contentType,String title,
                                String url,String displayName,String imagesLink,
-                               String contentLink,String description,String syncDateTime,
+                               String contentLink,String decription,String syncDateTime,
                                String createdAt,String modifiedAt){
 //        db=getWritableDatabase();
-        ContentValues contentValues=new ContentValues();
+            ContentValues contentValues=new ContentValues();
             contentValues.put(MODIFIED_AT,modifiedAt);
             contentValues.put(CREATED_AT,createdAt);
             contentValues.put(SYNC_DATE_TIME,syncDateTime);
-            contentValues.put(DESCRIPTION,description);
+            contentValues.put(DESCRIPTION,decription);
             contentValues.put(CONTENT_LINK,contentLink);
             contentValues.put(IMAGES_LINK,imagesLink);
             contentValues.put(DISPLAY_NAME,displayName);
             contentValues.put(URL,url);
             contentValues.put(TITLE,title);
             contentValues.put(CONTENT_TYPE,contentType);
-            contentValues.put(CONTENT_ID, contentId);
+            contentValues.put(CONTENT_ID, content_id);
 
         db.insert(CONTENT_INFO_TABLE, null, contentValues);
     }
@@ -159,7 +158,7 @@ public class ContentListLocalDB extends SQLiteOpenHelper{
                                String userId,String firstName,String lastName,
                                String email,String displayProfile,String
                                lastViewedDateTime,String numberOfViews,String
-                               numberofparticipant,String action){
+                                       numberofparticipant,String action){
 
 //        db=getWritableDatabase();
         ContentValues contentValues=new ContentValues();
@@ -173,27 +172,26 @@ public class ContentListLocalDB extends SQLiteOpenHelper{
         contentValues.put(FIRST_NAME,firstName);
         contentValues.put(USER_ID,userId);
         contentValues.put(NO_OF_PARTICIPANTS,numberofparticipant);
-        contentValues.put(CONTENT_ID,contentId);
+        contentValues.put(CONTENT_ID1,contentId);
         contentValues.put(USER_ADMIN_ID,userAdminId);
         contentValues.put(USER_CONTENT_ID,userContentId);
 
         db.insert(CONTENT_VIEW_TABLE, null, contentValues);
-        Log.e("view inserted", "view inserted");
     }
 
     //Methods to retrieve data from database but not in used right now...
     public Cursor retrieveRecord(){
-        db=getWritableDatabase();
+        db=getReadableDatabase();
         return db.rawQuery(RETRIEVE_QUERRY,null);
     }
 
     public Cursor getContentInfoData(){
-        db=getWritableDatabase();
+        db=getReadableDatabase();
         return db.rawQuery(RETRIEVE_INFO_CONTENT,null);
     }
 
     public Cursor getContentViewData(){
-        db=getWritableDatabase();
+        db=getReadableDatabase();
         return db.rawQuery(RETRIEVE_VIEW_CONTENT,null);
     }
 }

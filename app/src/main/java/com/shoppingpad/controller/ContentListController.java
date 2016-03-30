@@ -1,6 +1,7 @@
 package com.shoppingpad.controller;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 
 import com.shoppingpad.R;
@@ -27,12 +28,15 @@ import java.util.Random;
  * 1. This class acts as manager between all classes.
  * 2. It manages data flow between ViewModel and Model, ViewModel and rest or
  * database, model and rest or database.
+ * 3. This class is also responsible for adding view and info data into database.
+ * 4. It also generate otp and send it to view model.
+ * 5. It passes username and mobile number to server for verification and receive
+ * response from server and send back that response to user.
  */
 public class ContentListController {
 
     public static final boolean IS_UNIT_TEST = false;
     int code=0;
-
 
     public ContentListServiceHandler mContentListServiceHandler;
     RegistrationServiceHandler mRegistrationServiceHandler;
@@ -46,27 +50,27 @@ public class ContentListController {
     public ContentListController(Context context){
 
         if(IS_UNIT_TEST){
-            //Calling dummy method if rest call is not present...
 
+            //Calling dummy method if rest call is not present...
             mContentViewModelDataList=populateDummyData();
         }
         else {
+
+            //Initialize list...
             mContentInfoModelList=new ArrayList<>();
             mContentViewsModelList=new ArrayList<>();
 
             //Call to database...
             mLocalDB=new ContentListLocalDB(context);
             mContentListServiceHandler=new ContentListServiceHandler();
-
-            //Call to populate database...
-//            populateDatabase();
         }
     }
 
     public ContentListController() {
-
     }
 
+    //This method pass username and mob number to Service handler and get response
+    // from server
     public String setUserInfo(String phno,String name){
         String response=null;
         try {
@@ -78,11 +82,11 @@ public class ContentListController {
         return response;
     }
 
+    //This method generate OTP...
     public int generateOtp(){
-        //Generate 6 digits OTP
+        //Generate 6 digits OTP using random function...
         Random ran=new Random();
-        int otp=code= (100000 + ran.nextInt(900000));
-        return otp;
+        return code= (100000 + ran.nextInt(900000));
     }
 
     //Return generated OTP...
@@ -101,24 +105,26 @@ public class ContentListController {
     //Method to get Content info json data from service handler....
     public List<ContentInfoModel> getContentInfoJson(){
         List <ContentInfoModel> contentInfoModelList=new ArrayList<>();
-        JSONArray infoJsonArray=mContentListServiceHandler.getmInfoJsonArray();
         try {
+        JSONArray infoJsonArray=mContentListServiceHandler.getmInfoJsonArray();
 
         //Get service handlers Info list that contains Info data retrieved from Json
         for (int i=0;i<infoJsonArray.length();i++){
-
+                //Converts json data to json object and add to list
+                //It also populate info model data...
                 ContentInfoModel contentInfoModel = new ContentInfoModel();
                 JSONObject jsonObject = infoJsonArray.getJSONObject(i);
-                contentInfoModel.populateDummyData(jsonObject);
+                contentInfoModel.populateInfoDummyData(jsonObject);
                 contentInfoModelList.add(contentInfoModel);
             }
         }
-        catch (JSONException e) {
+        catch (NullPointerException | JSONException e){
             e.printStackTrace();
         }
-        Log.e("info list size",""+mContentInfoModelList.size());
-        for(int i=0 ;i<mContentInfoModelList.size();i++){
-            mLocalDB.insertInfoContentData(mContentInfoModelList.get(i));
+
+        //This loop insert info model list data into database one by one...
+        for(int i=0 ;i<contentInfoModelList.size();i++){
+            mLocalDB.insertInfoContentData(contentInfoModelList.get(i));
         }
         return contentInfoModelList;
     }
@@ -128,37 +134,27 @@ public class ContentListController {
 
         List<ContentViewsModel> contentViewsModelList=new ArrayList<>();
 
+        try {
         //Get service handlers View list that contains View data retrieved from Json
         JSONArray viewJsonArray = mContentListServiceHandler.getmViewJsonArray();
-
         for (int i=0;i<viewJsonArray.length();i++){
-            try {
+
+                //Converts json data to json object and add to list
+                //It also populate view model data...
                 JSONObject jsonObject = viewJsonArray.getJSONObject(i);
                 ContentViewsModel contentViewsModel=new ContentViewsModel();
-                contentViewsModel.populateDummyData(jsonObject);
-
+                contentViewsModel.populateViewDummyData(jsonObject);
                 contentViewsModelList.add(contentViewsModel);
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+        } catch (NullPointerException | JSONException e) {
+            e.printStackTrace();
         }
-        Log.e("view list size",""+mContentViewsModelList.size());
-        for(int i=0;i<mContentViewsModelList.size();i++){
-            mLocalDB.insertViewContentData(mContentViewsModelList.get(i));
+
+        //This loop insert view model list data into database one by one...
+        for(int i=0;i<contentViewsModelList.size();i++){
+            mLocalDB.insertViewContentData(contentViewsModelList.get(i));
         }
         return contentViewsModelList;
-    }
-
-    // Method that calls database handlers method to populate json data...
-    public void populateDatabase(){
-
-        for(int i=0 ;i<mContentInfoModelList.size();i++){
-            mLocalDB.insertInfoContentData(mContentInfoModelList.get(i));
-        }
-
-        for(int i=0;i<mContentViewsModelList.size();i++){
-            mLocalDB.insertViewContentData(mContentViewsModelList.get(i));
-        }
     }
 
     //Method to populate dummy data without rest call....
@@ -168,18 +164,88 @@ public class ContentListController {
         for (int i=0;i<5;i++) {
             ContentViewModelData contentViewModelData = new ContentViewModelData();
 
+            //Set dummy data to contents of view model data...
             contentViewModelData.mPartTitle = "dummy part time";
             contentViewModelData.mTimeTitle = "dummy time";
             contentViewModelData.mMainTitle = "dummy Main title";
             contentViewModelData.mStatusTitle = "dummy status title";
             contentViewModelData.mViewTitle = "dummy View title";
 
-            //Comment to set mMainIcon from url...
-//            contentViewModelData.mMainIcon = R.drawable.user;
             contentViewModelData.mShareIcon = R.drawable.share;
-
             contentViewModelDataList.add(contentViewModelData);
         }
         return contentViewModelDataList;
+    }
+
+    public List<ContentInfoModel> getInfoDatabase(){
+
+        Cursor infoCursor=mLocalDB.getContentInfoData();
+        JSONArray infoJsonArray = cursorToJson(infoCursor);
+        List <ContentInfoModel> contentInfoModelList=new ArrayList<>();
+        for (int i=0;i<infoJsonArray.length();i++){
+            try {
+                //Converts json data to json object and add to list
+                //It also populate view model data...
+                JSONObject jsonObject = infoJsonArray.getJSONObject(i);
+                ContentInfoModel contentInfoModel = new ContentInfoModel();
+                contentInfoModel.populateInfoDummyData(jsonObject);
+                contentInfoModelList.add(contentInfoModel);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return contentInfoModelList;
+    }
+
+    public List <ContentViewsModel> getViewDatabase(){
+        Cursor viewCursor=mLocalDB.getContentViewData();
+        JSONArray viewJsonArray=cursorToJson(viewCursor);
+        List <ContentViewsModel> contentViewsModelList=new ArrayList<>();
+        for (int i=0;i<viewJsonArray.length();i++){
+            try {
+
+                //Converts json data to json object and add to list
+                //It also populate view model data...
+                JSONObject jsonObject = viewJsonArray.getJSONObject(i);
+                ContentViewsModel contentViewsModel = new ContentViewsModel();
+                contentViewsModel.populateViewDummyData(jsonObject);
+                contentViewsModelList.add(contentViewsModel);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return contentViewsModelList;
+    }
+
+    public JSONArray cursorToJson(Cursor cursor){
+
+        JSONArray result = new JSONArray();
+
+        //Move cursor to first record...
+        cursor.moveToFirst();
+
+        //isAfterLast() returns whether cursor is pointing to position after last row
+        while (!cursor.isAfterLast()) {
+
+            int columnCount = cursor.getColumnCount();
+            JSONObject rowObj = new JSONObject();
+
+            for (int i = 0; i < columnCount; i++) {
+                if (cursor.getColumnName(i) != null) {
+                    try {
+                        //Put data from cursor into json obj in key-value format...
+                        rowObj.put(cursor.getColumnName(i),
+                                cursor.getString(i));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            //Add json obj int json array...
+            result.put(rowObj);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return result;
     }
 }

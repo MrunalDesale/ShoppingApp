@@ -1,14 +1,14 @@
 package com.shoppingpad.viewmodel;
 
 import android.content.Context;
-import android.util.Log;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import com.shoppingpad.R;
 import com.shoppingpad.controller.ContentListController;
 import com.shoppingpad.model.ContentInfoModel;
 import com.shoppingpad.model.ContentViewsModel;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +27,14 @@ public class ContentViewModelHandler {
 
     public List<ContentViewModelData> resultList;
 
+    List<ContentInfoModel> mInfoModelList;
+    List<ContentViewsModel> mViewsModelList;
+
     ContentListController mContentListController;
+    Context context;
     public ContentViewModelHandler(Context context)
     {
+        this.context=context;
         if(IS_UNIT_TEST)
             //Calling dummy method if rest call is not present...
             resultList=getDummyData();
@@ -53,48 +58,89 @@ public class ContentViewModelHandler {
 
     public List<ContentViewModelData> populateData(){
 
-        int infoListSize=mContentListController.getInfoModelList().size();
+        boolean temp=isNetworkAvailable();
+        //If internet connection is not available
+        if(temp == false) {
 
-        //Set one by one content using json data...
-        for (int i=0;i<infoListSize;i++) {
+            List<ContentInfoModel> infoDbList=mContentListController.getInfoDatabase();
+            List <ContentViewsModel> viewDbList=mContentListController.getViewDatabase();
 
-            ContentViewModelData contentViewModelData = new ContentViewModelData();
+            for (int i = 0; i < infoDbList.size(); i++) {
 
-            //Get InfoModel and ViewModel list from controller...
-            ContentInfoModel contentInfoModel= mContentListController.
-                    getInfoModelList().get(i);
-            ContentViewsModel contentViewsModel= mContentListController.
-                    getContentViewsModelList().get(i);
+                ContentViewModelData contentViewModelData = new ContentViewModelData();
 
-            //Binds all elements using Observable ViewModelData...
+                //Get InfoModel and ViewModel list from controller...
+                ContentInfoModel contentInfoModel = infoDbList.get(i);
+                ContentViewsModel contentViewsModel = viewDbList.get(i);
 
-            contentViewModelData.setmMainTitle(contentInfoModel.mContentType);
-            contentViewModelData.setmStatusTitle(contentInfoModel.mDisplayName);
-            contentViewModelData.setmPartTitle(contentViewsModel.mNumberOfParticipant);
-            contentViewModelData.setmViewTitle(contentViewsModel.mNoOfViews);
-            contentViewModelData.setmPartTitle(contentViewsModel.mFirstName);
-            contentViewModelData.setmTimeTitle(contentViewsModel.mLastViewedDateTime);
+                //Binds all elements using Observable ViewModelData...
 
-            String profilePicUrl=contentViewsModel.mDisplayProfile;
-            contentViewModelData.setmMainIcon(profilePicUrl);
+                contentViewModelData.setmMainTitle(contentInfoModel.mContentType);
+                contentViewModelData.setmStatusTitle(contentInfoModel.mDisplayName);
+                contentViewModelData.setmPartTitle(contentViewsModel.mNumberOfParticipant);
+                contentViewModelData.setmViewTitle(contentViewsModel.mNoOfViews);
+                contentViewModelData.setmTimeTitle(contentViewsModel.mLastViewedDateTime);
 
-            //Code to test contents are setting without using set method...
+                String profilePicUrl = contentViewsModel.mDisplayProfile;
+                contentViewModelData.setmMainIcon(profilePicUrl);
+
+                contentViewModelData.mShareIcon = R.drawable.share;
+
+                //Add ViewModel object to list that is passed to adapter...
+                resultList.add(contentViewModelData);
+            }
+        }
+        //If internet connection is present
+        else {
+            mInfoModelList = mContentListController.getInfoModelList();
+            mViewsModelList = mContentListController.getContentViewsModelList();
+
+            //Set one by one content using json data...
+            for (int i = 0; i < mInfoModelList.size(); i++) {
+
+                ContentViewModelData contentViewModelData = new ContentViewModelData();
+
+                //Get InfoModel and ViewModel list from controller...
+                ContentInfoModel contentInfoModel = mInfoModelList.get(i);
+                ContentViewsModel contentViewsModel = mViewsModelList.get(i);
+
+                //Binds all elements using Observable ViewModelData...
+
+                contentViewModelData.setmMainTitle(contentInfoModel.mContentType);
+                contentViewModelData.setmStatusTitle(contentInfoModel.mDisplayName);
+                contentViewModelData.setmPartTitle(contentViewsModel.mNumberOfParticipant);
+                contentViewModelData.setmViewTitle(contentViewsModel.mNoOfViews);
+                contentViewModelData.setmPartTitle(contentViewsModel.mFirstName);
+                contentViewModelData.setmTimeTitle(contentViewsModel.mLastViewedDateTime);
+
+                String profilePicUrl = contentViewsModel.mDisplayProfile;
+                contentViewModelData.setmMainIcon(profilePicUrl);
+
+                //Code to test contents are setting without using set method...
 //            contentViewModelData.mMainTitle = contentInfoModel.mContentType;
 //            contentViewModelData.mStatusTitle = contentInfoModel.mDisplayName;
 //            contentViewModelData.mViewTitle = contentViewsModel.mNoOfViews;
 //            contentViewModelData.mTimeTitle = contentViewsModel.mLastViewedDateTime;
 //            contentViewModelData.mPartTitle = contentViewsModel.mFirstName;
 
-            //Set an image fetched from given url...
+                //Set an image fetched from given url...
 //            String url="http://www.hdpicswale.in/assets/upload/bollywood-wallpapers/" +
 //                    "farhan-akhtar-307/farhan-akhtar-latest-stills-7566.jpeg";
 //            contentViewModelData.setmMainIcon(url);
-            contentViewModelData.mShareIcon = R.drawable.share;
+                contentViewModelData.mShareIcon = R.drawable.share;
 
-            //Add ViewModel object to list that is passed to adapter...
-            resultList.add(contentViewModelData);
+                //Add ViewModel object to list that is passed to adapter...
+                resultList.add(contentViewModelData);
+            }
         }
         return resultList;
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     //Code for connection between ViewModel and View...

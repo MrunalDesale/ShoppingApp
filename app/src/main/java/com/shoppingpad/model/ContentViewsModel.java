@@ -1,5 +1,8 @@
 package com.shoppingpad.model;
 
+import android.content.Intent;
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,25 +28,27 @@ public class ContentViewsModel {
     public String mUserContentId;
     public String mNumberOfParticipant;
 
-    public void populateDummyData(JSONObject serviceHandlerView){
+    public void populateViewDummyData(JSONObject serviceHandlerView) {
 
-        //Fetches data from json object and set to ContentView...
-        try {
-            mUserContentId = serviceHandlerView.getString("userContentId");
-            mUserAdminId = serviceHandlerView.getString("userAdminId");
-            mContentId = serviceHandlerView.getString("contentId");
-            mUserId = serviceHandlerView.getString("userId");
-            mFirstName = serviceHandlerView.getString("firstName");
-            mLastName = serviceHandlerView.getString("lastName");
-            mEmail = serviceHandlerView.getString("email");
-            mDisplayProfile = serviceHandlerView.getString("displayProfile");
-            mLastViewedDateTime = serviceHandlerView.getString("lastViewedDateTime");
-            mNoOfViews = serviceHandlerView.getString("numberOfViews");
-            mAction = serviceHandlerView.getString("action");
-            mNumberOfParticipant = serviceHandlerView.getString("numberofparticipant");
+        if (serviceHandlerView != null) {
+            //Fetches data from json object and set to ContentView...
+            try {
+                mUserContentId = Integer.toString(serviceHandlerView.getInt("userContentId"));
+                mUserAdminId = Integer.toString(serviceHandlerView.optInt("userAdminId"));
+                mContentId = Integer.toString(serviceHandlerView.getInt("contentId"));
+                mUserId = Integer.toString(serviceHandlerView.getInt("userId"));
+                mFirstName = serviceHandlerView.getString("firstName");
+                mLastName = serviceHandlerView.getString("lastName");
+                mEmail = serviceHandlerView.getString("email");
+                mDisplayProfile = serviceHandlerView.getString("displayProfile");
+                mLastViewedDateTime = serviceHandlerView.getString("lastViewedDateTime");
+                mNoOfViews = Integer.toString(serviceHandlerView.getInt("numberOfViews"));
+                mAction = serviceHandlerView.getString("action");
+                mNumberOfParticipant = Integer.toString(serviceHandlerView.getInt("numberofparticipant"));
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

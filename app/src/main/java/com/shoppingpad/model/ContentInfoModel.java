@@ -1,5 +1,6 @@
 package com.shoppingpad.model;
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,23 +24,25 @@ public class ContentInfoModel {
     public String mContentType;
     public String mContentId;
 
-    public void populateDummyData(JSONObject contentInfoModelList){
+    public void populateInfoDummyData(JSONObject contentInfoModelList){
 
-        //Fetches data from json object and set to ContentInfo...
-        try {
-            mContentId = contentInfoModelList.getString("content_id");
-            mContentType = contentInfoModelList.getString("contentType");
-            mTitle = contentInfoModelList.getString("title");
-            mUrl = contentInfoModelList.getString("url");
-            mDisplayName = contentInfoModelList.getString("display_name");
-            mImagesLink = contentInfoModelList.getString("imagesLink");
-            mContentLink = contentInfoModelList.getString("contentLink");
-            mDescription = contentInfoModelList.getString("decription");
-            mSynchDateTime = contentInfoModelList.getString("syncDateTime");
-            mCreatedAt = contentInfoModelList.getString("created_at");
-            mModifiedAt = contentInfoModelList.getString("modified_at");
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(contentInfoModelList != null) {
+            //Fetches data from json object and set to ContentInfo...
+            try {
+                mContentType = contentInfoModelList.getString("contentType");
+                mTitle = String.valueOf(contentInfoModelList.getInt("title"));
+                mUrl = contentInfoModelList.getString("url");
+                mDisplayName = contentInfoModelList.getString("display_name");
+                mImagesLink = contentInfoModelList.getString("imagesLink");
+                mContentLink = contentInfoModelList.getString("contentLink");
+                mDescription = contentInfoModelList.getString("decription");
+                mSynchDateTime = contentInfoModelList.getString("syncDateTime");
+                mCreatedAt = contentInfoModelList.getString("created_at");
+                mModifiedAt = contentInfoModelList.getString("modified_at");
+                mContentId = Integer.toString(contentInfoModelList.getInt("content_id"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
