@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shoppingpad.R;
+import com.shoppingpad.databinding.NameInsertBinding;
 import com.shoppingpad.databinding.RegistrationBinding;
 import com.shoppingpad.util.VerifyNumberFormat;
 import com.shoppingpad.viewmodel.RegistrationViewModelHandler;
@@ -31,7 +32,7 @@ import com.shoppingpad.viewmodel.RegistrationViewModelHandler;
  */
 public class RegistrationView extends AppCompatActivity{
 
-    TextView mMessage1,mMessage2;
+    TextView mMessage1,mMessage2,mMessage3;
     EditText mPhoneNumber,mCountryCode,mNameEditText;
     Spinner mSpinner;
     Button mRegistration,mVerify,mNext;
@@ -50,6 +51,7 @@ public class RegistrationView extends AppCompatActivity{
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -84,7 +86,6 @@ public class RegistrationView extends AppCompatActivity{
             public void onClick(View v) {
 
                 mVerifyNumberFormat=new VerifyNumberFormat();
-
                 //Get mobile number from EditText...
                 no = String.valueOf(mPhoneNumber.getText());
                 mPhoneNo=no;
@@ -110,7 +111,8 @@ public class RegistrationView extends AppCompatActivity{
                             //Set layout of Insert name...
                             setContentView(R.layout.name_insert);
                             mNameEditText = (EditText) findViewById(R.id.name);
-
+                            mMessage3= (TextView) findViewById(R.id.Message3);
+                            mMessage3.setText("Please provide your name and optional profile photo");
                             mNext= (Button) findViewById(R.id.next);
 
                             //On click event of next button to proceed...
@@ -119,13 +121,10 @@ public class RegistrationView extends AppCompatActivity{
                                 public void onClick(View v) {
                                     nm = String.valueOf(mNameEditText.getText());
                                     User user=new User(nm,no);
-
-                                    //Set user details using binding...
                                     registrationBinding.setUser(user);
-
-                                    //Call async task...
                                     new RegistrationAsync().execute(user.
                                             getmMobileNo(), user.getmUserName());
+
                                     //Start next activity...
 //                                    startActivity(new Intent(RegistrationView.this,
 //                                            ContentListView.class));
@@ -144,7 +143,6 @@ public class RegistrationView extends AppCompatActivity{
         String mResponse;
         @Override
         protected String doInBackground(String... params) {
-
             //Call method and get response from server...
             mResponse= mRegistrationVMHandler.setUserData(params[0], params[1]);
             return mResponse;
@@ -154,12 +152,8 @@ public class RegistrationView extends AppCompatActivity{
         protected void onPostExecute(String s) {
 
             super.onPostExecute(s);
-            if(mResponse != null)
-                Toast.makeText(RegistrationView.this, ""+mResponse, Toast.LENGTH_SHORT)
-                                                                .show();
-            else
-                Toast.makeText(RegistrationView.this, "Internet connection " +
-                        "unavailable.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegistrationView.this, ""+mResponse, Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 }

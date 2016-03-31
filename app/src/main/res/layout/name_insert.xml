@@ -8,7 +8,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8797B2"
+    android:background="#fff"
     android:theme="@style/Temp">
     <include
         android:id="@+id/app_bar2"
@@ -32,6 +32,7 @@
         android:layout_alignBottom="@+id/profilePic"
         android:layout_toEndOf="@+id/profilePic"
         android:layout_marginBottom="61dp" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

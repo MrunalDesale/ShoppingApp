@@ -5,107 +5,116 @@
             name="user"
             type="com.shoppingpad.view.User"/>
     </data>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:theme="@style/NewTheme"
-    android:orientation="vertical"
-    android:background="#E2E2E2">
-
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/root1"
-        android:background="#EEEEEE"
-        android:paddingStart="10dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="13dp"
-        android:paddingRight="13dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
-            android:paddingTop="20dp"
-            android:textColor="#4c4c4c"
-            android:id="@+id/Message1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="260dp"
-        android:paddingTop="10dp"
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme"
         android:orientation="vertical"
-        android:background="#EEEEEE"
-        android:paddingEnd="13dp"
-        android:paddingRight="13dp"
-        android:paddingStart="10dp"
-        android:paddingLeft="10dp">
+        android:background="#E2E2E2">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
-            android:paddingTop="30dp"
-            android:id="@+id/Message2"
-            android:textColor="#4c4c4c" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="120dp"
-            android:paddingLeft="120dp"
-            android:paddingEnd="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="25dp"
-            android:id="@+id/spinner"
-            android:entries="@array/country">
-
-        </Spinner>
+        <include
+            layout="@layout/app_bar"
+            android:id="@+id/app_bar" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="25dp">
+            android:theme="@style/AppTheme"
+            android:id="@+id/root1"
+            android:background="#EEEEEE"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="13dp"
+            android:paddingRight="13dp">
 
             <TextView
-                android:layout_width="30dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="+"
-                android:textSize="20sp"
-                android:id="@+id/textView2"
-                android:paddingStart="15dp"
-                android:paddingLeft="15dp"/>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:paddingTop="20dp"
+                android:textColor="#4c4c4c"
+                android:id="@+id/Message1" />
+        </LinearLayout>
 
-            <EditText
-                android:layout_width="40dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:theme="@style/AppTheme"
+            android:paddingTop="10dp"
+            android:orientation="vertical"
+            android:background="#EEEEEE"
+            android:paddingEnd="13dp"
+            android:paddingRight="13dp"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/countryCode">
-                <requestFocus/>
-            </EditText>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/Message2"
+                android:textColor="#4c4c4c"/>
 
-            <EditText
-                android:id="@+id/phone_number"
-                android:text="@{user.mMobileNo}"
-                bind:addTextChangedListener="@{user.changed}"
-                android:layout_width="200dp"
+            <Spinner
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="phone number"
-                android:paddingLeft="20dp" />
+                android:paddingStart="120dp"
+                android:paddingLeft="120dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="25dp"
+                android:id="@+id/spinner"
+                android:entries="@array/country">
+            </Spinner>
 
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:id="@+id/Registration"
-                android:text="OK"
-                android:background="#d3d3d3" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:theme="@style/AppTheme"
+                android:paddingTop="25dp">
+
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:text="+"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="20sp"
+                    android:id="@+id/textView2"
+                    android:paddingStart="15dp"
+                    android:paddingLeft="15dp"/>
+
+                <EditText
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColorPrimary"
+                    android:id="@+id/countryCode">
+                    <requestFocus/>
+                </EditText>
+
+                <EditText
+                    android:id="@+id/phone_number"
+                    android:text="@{user.mMobileNo}"
+                    bind:addTextChangedListener="@{user.changed}"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:hint="phone number"
+                    android:textColorHint="@color/textColorSecondary"
+                    android:paddingLeft="20dp" />
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/Registration"
+                    android:textColor="@color/textColorPrimary"
+                    android:text="OK"
+                    android:background="#d3d3d3" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
 </layout>
