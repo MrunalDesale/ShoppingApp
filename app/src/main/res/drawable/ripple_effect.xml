@@ -13,7 +13,7 @@
 
     <item>
         <shape>
-            <solid android:color="@color/colorPrimaryDark"></solid>
+            <solid android:color="@color/colorPrimary"></solid>
         </shape>
     </item>
 </ripple>

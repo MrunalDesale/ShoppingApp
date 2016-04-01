@@ -2,6 +2,7 @@ package com.shoppingpad.controller;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.shoppingpad.R;
 import com.shoppingpad.dbhandler.ContentListLocalDB;
@@ -71,10 +72,14 @@ public class ContentListController {
     //This method pass username and mob number to Service handler and get response
     // from server
     public String setUserInfo(String phno,String name){
-        String response=null;
+        String response=null,response1=null;
+        String profilePic="http://images.pocketgamer.co.uk/artwork/imgthumbs/na-rmgx/android_lge.jpg";
         try {
             mRegistrationServiceHandler=new RegistrationServiceHandler();
-            response=mRegistrationServiceHandler.postData(phno,name);
+            response= mRegistrationServiceHandler.postData(phno,name);
+            response1= mRegistrationServiceHandler.postProfilePic(profilePic);
+
+            Log.e("response 1 ",response1);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

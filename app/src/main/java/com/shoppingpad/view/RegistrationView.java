@@ -1,16 +1,21 @@
 package com.shoppingpad.view;
 
 import android.annotation.TargetApi;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +35,7 @@ import com.shoppingpad.viewmodel.RegistrationViewModelHandler;
  * 3.It takes data from ViewModel and shows components to user.
  * 4.It contains components and methods required by user for interaction.
  */
-public class RegistrationView extends AppCompatActivity{
+public class RegistrationView extends AppCompatActivity {
 
     TextView mMessage1,mMessage2,mMessage3;
     EditText mPhoneNumber,mCountryCode,mNameEditText;
@@ -38,6 +43,7 @@ public class RegistrationView extends AppCompatActivity{
     Button mRegistration,mVerify,mNext;
     String mPhoneNo;
     boolean mVerificationResult;
+    ImageView mProfilePic;
     Context mContext;
 
     //Returns instance of this class...
@@ -115,6 +121,16 @@ public class RegistrationView extends AppCompatActivity{
                             mMessage3.setText("Please provide your name and optional profile photo");
                             mNext= (Button) findViewById(R.id.next);
 
+                            //Set profile picture...
+                            mProfilePic= (ImageView) findViewById(R.id.profilePic);
+                            mProfilePic.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    onRegImageBtnClicked(v);
+//                                    mProfilePic.set
+                                }
+                            });
+
                             //On click event of next button to proceed...
                             mNext.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -135,6 +151,48 @@ public class RegistrationView extends AppCompatActivity{
                 }
             }
         });
+    }
+
+    public void onRegImageBtnClicked(View view) {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_PICK);
+        // code for crop image
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 0);
+        intent.putExtra("aspectY", 0);
+        intent.putExtra("outputX", 200);
+        intent.putExtra("outputY", 150);
+
+        try {
+            intent.putExtra("return-data", true);
+            startActivityForResult(Intent.createChooser(intent, "select picture"), 1);
+        }
+        catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK)
+        {
+            if(requestCode == 1)
+            {
+                Bundle extras = data.getExtras();
+
+                String  uri = data.toString();
+
+                if(uri != null)
+                    Log.e("URI",uri);
+                else
+                    Log.e("Uri is null","null");
+                if(extras != null)
+                {
+                    Bitmap photo = extras.getParcelable("data");
+                    mProfilePic.setImageBitmap(photo);
+                }
+            }
+        }
     }
 
     //AsyncTask call to get response and print that response from server...

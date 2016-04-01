@@ -19,7 +19,7 @@
             android:text="Next"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="15dp"
-            android:background="@drawable/ripple_effect"/>
+            android:background="@color/colorPrimary"/>
     </RelativeLayout>
 
 </android.support.v7.widget.Toolbar>
