@@ -3,6 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="MainTitle">MainTitle</string>
     <string name="name">Name</string>
+    <string name="message3">Message</string>
 
     <string-array name="country">
         <item>India</item>
