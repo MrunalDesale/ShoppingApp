@@ -2,6 +2,7 @@ package com.shoppingpad.viewmodel;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -21,11 +22,13 @@ public class RegistrationViewModelHandler {
 
     boolean result;
     ContentListController mContentListController;
+    String mFileName;
+    Bitmap mBitmap;
 
-    public String setUserData(String phno, String name){
+    public String setUserData(String phno, String name,String fileName,String encodedImage){
         mContentListController=new ContentListController();
         String response;
-        response=mContentListController.setUserInfo(phno,name);
+        response=mContentListController.setUserInfo(phno,name,fileName,encodedImage);
         return response;
     }
 
@@ -39,6 +42,7 @@ public class RegistrationViewModelHandler {
         mContentListController=new ContentListController();
        return mContentListController.getOtp();
     }
+
     public void setOtp(EditText textV1,String phoneNo,Context context){
 
         //Set alignment of text in EditText...
@@ -60,8 +64,8 @@ public class RegistrationViewModelHandler {
 
             //SMS to be send...
             //Message after confirmation of OTP and mobile number...
-            String message="Your number is verified. You have successfully registered shopping " +
-                    "pad app. Your one time number is "+otp;
+            String message="Your number is verified. You have successfully registered" +
+                    " shopping pad app. Your one time number is "+otp;
 
             //Get default instance of SmsManager
             SmsManager smsManager = SmsManager.getDefault();

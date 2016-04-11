@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -21,61 +20,8 @@ import java.net.URLEncoder;
 public class RegistrationServiceHandler {
 
     URL mUrl,mProfilePicUrl;
-    String response = "";
+    String mResponse = "",response1 = "";
     String mPhoneNo,mName;
-
-    public String postProfilePic(String profilePic){
-        String data;
-        StringBuilder buffer = new StringBuilder("");
-        try {
-
-            //Prepare data passed to server...
-            data = URLEncoder.encode("phone_no", "UTF-8") + "=" + URLEncoder
-                    .encode(profilePic, "UTF-8");
-//            data+="&"+URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder
-//                    .encode(mName, "UTF-8");
-
-            //Url on which data is to be posted...
-            mProfilePicUrl = new URL("http://54.86.64.100:3000/api/v1/user/set-profile-pic");
-
-            OutputStreamWriter outputStream;
-
-            //Establish connection to url...
-            HttpURLConnection urlConnection = (HttpURLConnection) mProfilePicUrl.openConnection();
-            urlConnection.setDoOutput(true);
-
-            //get outputStream to write data to url...
-            outputStream = new OutputStreamWriter(urlConnection.getOutputStream());
-
-            //Write data to url...
-            outputStream.write(data);
-            outputStream.flush();
-
-            //Code to fetch response from url...
-            //Get inputStream to read data from url...
-            InputStream inputStream = urlConnection.getInputStream();
-
-            //Read data...
-            BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
-            String line;
-            while ((line = rd.readLine()) != null) {
-
-                //Write data to buffer...
-                buffer.append(line);
-            }
-
-            //Get response message fetched from server...
-            response=buffer.toString();
-
-            //close connection...
-            outputStream.close();
-            urlConnection.disconnect();
-
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        return response;
-    }
 
     public String postData(String phno,String name) throws FileNotFoundException {
 
@@ -94,8 +40,6 @@ public class RegistrationServiceHandler {
             //Url on which data is to be posted...
             mUrl = new URL("http://54.86.64.100:3000/api/v1/user/mobile/"+
                     mPhoneNo+"/"+mName);
-
-            mProfilePicUrl = new URL("http://54.86.64.100:3000/api/v1/user/set-profile-pic");
 
             OutputStreamWriter outputStream;
 
@@ -124,7 +68,7 @@ public class RegistrationServiceHandler {
             }
 
             //Get response message fetched from server...
-            response=buffer.toString();
+            mResponse=buffer.toString();
 
             //close connection...
             outputStream.close();
@@ -133,6 +77,58 @@ public class RegistrationServiceHandler {
         } catch (IOException e){
             e.printStackTrace();
         }
-        return response;
+        return mResponse;
+    }
+
+    private String postProfilePic(String imagePath, String encodedImage) {
+
+        //Prepare data passed to server...
+        try {
+
+            //Url on which data is to be posted...
+            mProfilePicUrl = new URL("http://54.86.64.100:3000/api/v1/test/postdata");
+
+            //Establish connection to url...
+            HttpURLConnection urlConnection = (HttpURLConnection) mProfilePicUrl.openConnection();
+
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoInput(true);
+
+            //Add properties to the request header...
+            urlConnection.setRequestProperty("Connection", "Keep-Alive");
+            urlConnection.setRequestProperty("Cache-Control", "no-cache");
+            urlConnection.setRequestProperty("Content-Type", "image/jpeg");
+
+            //Write encoded image to outputstream...
+            OutputStreamWriter os = new OutputStreamWriter(urlConnection.getOutputStream());
+            os.write(String.valueOf(encodedImage));
+            os.flush();
+
+            //Get response from server...
+            InputStream in = urlConnection.getInputStream();
+            BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(in));
+            String line;
+            StringBuilder stringBuilder = new StringBuilder();
+
+            //Read response...
+            while ((line = responseStreamReader.readLine()) != null)
+                stringBuilder.append(line).append("\n");
+            responseStreamReader.close();
+            response1 = stringBuilder.toString();
+
+            System.out.println(response1);
+
+            //Close connection...
+            os.close();
+            urlConnection.disconnect();
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        //Return server response...
+        return response1;
     }
 }

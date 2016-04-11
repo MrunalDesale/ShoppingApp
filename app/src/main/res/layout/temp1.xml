@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="user"
+            type="com.shoppingpad.view.User"/>
+    </data>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="7dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/item_touch_helper_max_drag_scroll_per_frame"
+        android:paddingLeft="@dimen/item_touch_helper_max_drag_scroll_per_frame"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/msg1"
+        android:id="@+id/Message2"
+        android:textColor="@color/textColorPrimary"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="120dp"
+        android:layout_marginTop="60dp"
+        android:paddingEnd="10dp"
+        android:id="@+id/spinner"
+        android:entries="@array/country"
+        android:layout_above="@+id/countryCode"
+        android:layout_alignEnd="@+id/Registration"
+        android:layout_marginBottom="33dp">
+    </Spinner>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="20sp"
+        android:id="@+id/textView2"
+        android:layout_alignBottom="@+id/Registration"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColorPrimary"
+        android:id="@+id/countryCode"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_toEndOf="@+id/textView2">
+        <requestFocus/>
+    </EditText>
+    <EditText
+        android:id="@+id/phone_number"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="phone number"
+        android:paddingLeft="5dp"
+        android:textColorHint="@color/textColorSecondary"
+        bind:addTextChangedListener="@{user.changed}"
+        android:layout_alignBottom="@+id/Registration"
+        android:layout_toStartOf="@+id/Registration" />
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:id="@+id/Registration"
+        android:layout_marginRight="5dp"
+        android:textColor="@color/textColorPrimary"
+        android:text="OK"
+        android:background="#d3d3d3"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>
+    </layout>

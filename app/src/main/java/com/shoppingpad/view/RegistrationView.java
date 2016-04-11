@@ -1,17 +1,19 @@
 package com.shoppingpad.view;
 
 import android.annotation.TargetApi;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,11 +22,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.internal.http.multipart.MultipartEntity;
 import com.shoppingpad.R;
-import com.shoppingpad.databinding.NameInsertBinding;
-import com.shoppingpad.databinding.RegistrationBinding;
+import com.shoppingpad.databinding.Temp1Binding;
 import com.shoppingpad.util.VerifyNumberFormat;
 import com.shoppingpad.viewmodel.RegistrationViewModelHandler;
+
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.params.HttpConnectionParams;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by bridgelabz3 on 21/3/16.
@@ -37,47 +44,51 @@ import com.shoppingpad.viewmodel.RegistrationViewModelHandler;
  */
 public class RegistrationView extends AppCompatActivity {
 
-    TextView mMessage1,mMessage2,mMessage3;
-    EditText mPhoneNumber,mCountryCode,mNameEditText;
+    TextView mMessage1, mMessage2, mMessage3;
+    EditText mPhoneNumber, mCountryCode, mNameEditText;
     Spinner mSpinner;
-    Button mRegistration,mVerify,mNext;
-    String mPhoneNo;
+    Button mRegistration, mVerify, mNext;
+    String mPhoneNo, mImagePath;
     boolean mVerificationResult;
     ImageView mProfilePic;
     Context mContext;
+    RegistrationViewModelHandler mRegistrationVMHandler;
+    VerifyNumberFormat mVerifyNumberFormat;
+    Bitmap mBitmap;
+    private String mEncodedImage;
+
 
     //Returns instance of this class...
-    Context getContext(){
-        mContext=this;
+    Context getContext() {
+        mContext = this;
         return mContext;
     }
 
-    RegistrationViewModelHandler mRegistrationVMHandler;
-    VerifyNumberFormat mVerifyNumberFormat;
-
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Create binding object...
-        final RegistrationBinding registrationBinding= DataBindingUtil.setContentView(
-                this,R.layout.registration);
+//        final RegistrationBinding registrationBinding = DataBindingUtil.setContentView(
+//                this, R.layout.registration);
+
+        final Temp1Binding temp1Binding = DataBindingUtil.setContentView(this,
+                R.layout.temp1);
 
         //Set registration layout...
         setContentView(R.layout.registration);
-        mVerificationResult=false;
+        mVerificationResult = false;
 
         //Code to find contents displayed on registration screen...
-        mRegistration=(Button)findViewById(R.id.Registration);
-        mVerify= (Button) findViewById(R.id.verify);
-        mPhoneNumber=(EditText)findViewById(R.id.phone_number);
+        mRegistration = (Button) findViewById(R.id.Registration);
+        mVerify = (Button) findViewById(R.id.verify);
+        mPhoneNumber = (EditText) findViewById(R.id.phone_number);
         mSpinner = (Spinner) findViewById(R.id.spinner);
-        mCountryCode=(EditText)findViewById(R.id.countryCode);
-        mMessage1=(TextView)findViewById(R.id.Message1);
-        mMessage2=(TextView)findViewById(R.id.Message2);
-        mNext= (Button) findViewById(R.id.next);
+        mCountryCode = (EditText) findViewById(R.id.countryCode);
+        mMessage1 = (TextView) findViewById(R.id.Message1);
+        mMessage2 = (TextView) findViewById(R.id.Message2);
+        mNext = (Button) findViewById(R.id.next);
 
         //Message set to EditText...
         mMessage1.setText("ShoppingPad app will send a one time SMS message to " +
@@ -87,27 +98,28 @@ public class RegistrationView extends AppCompatActivity {
 
         //Click event of number verification...
         mRegistration.setOnClickListener(new View.OnClickListener() {
-            String nm,no;
+            String nm, no;
+
             @Override
             public void onClick(View v) {
 
-                mVerifyNumberFormat=new VerifyNumberFormat();
+                mVerifyNumberFormat = new VerifyNumberFormat();
                 //Get mobile number from EditText...
                 no = String.valueOf(mPhoneNumber.getText());
-                mPhoneNo=no;
+                mPhoneNo = no;
 
                 //Get result of number format
-                mVerificationResult=mVerifyNumberFormat.verifyNumberFormat(no);
+                mVerificationResult = mVerifyNumberFormat.verifyNumberFormat(no);
 
                 //If format is correct then...
                 if (mVerificationResult) {
-                    mRegistrationVMHandler=new RegistrationViewModelHandler();
+                    mRegistrationVMHandler = new RegistrationViewModelHandler();
                     //Set set Otp layout...
                     setContentView(R.layout.received_otp);
                     EditText textV1 = (EditText) findViewById(R.id.OTP);
 
-                    mRegistrationVMHandler.setOtp(textV1,no,getContext());
-                    mVerify= (Button) findViewById(R.id.verify);
+                    mRegistrationVMHandler.setOtp(textV1, no, getContext());
+                    mVerify = (Button) findViewById(R.id.verify);
 
                     //On click event of verify OTP...
                     mVerify.setOnClickListener(new View.OnClickListener() {
@@ -117,17 +129,17 @@ public class RegistrationView extends AppCompatActivity {
                             //Set layout of Insert name...
                             setContentView(R.layout.name_insert);
                             mNameEditText = (EditText) findViewById(R.id.name);
-                            mMessage3= (TextView) findViewById(R.id.Message3);
-                            mMessage3.setText("Please provide your name and optional profile photo");
-                            mNext= (Button) findViewById(R.id.next);
+                            mMessage3 = (TextView) findViewById(R.id.Message3);
+                            mMessage3.setText("Please provide your name and optional" +
+                                    " profile photo");
+                            mNext = (Button) findViewById(R.id.next);
 
                             //Set profile picture...
-                            mProfilePic= (ImageView) findViewById(R.id.profilePic);
+                            mProfilePic = (ImageView) findViewById(R.id.profilePic);
                             mProfilePic.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     onRegImageBtnClicked(v);
-//                                    mProfilePic.set
                                 }
                             });
 
@@ -136,12 +148,20 @@ public class RegistrationView extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     nm = String.valueOf(mNameEditText.getText());
-                                    User user=new User(nm,no);
-                                    registrationBinding.setUser(user);
-                                    new RegistrationAsync().execute(user.
-                                            getmMobileNo(), user.getmUserName());
 
-                                    //Start next activity...
+                                    //Pass user name and mobile number to data binding...
+                                    User user = new User(nm, no);
+                                    temp1Binding.setUser(user);
+
+                                    //Get encoded image...
+                                    mEncodedImage=getStringImage(mBitmap);
+
+                                    //Call async task...
+                                    new RegistrationAsync().execute(user.
+                                                    getmMobileNo(), user.getmUserName(),
+                                            mImagePath, mEncodedImage);
+
+                                    //Comment to start next activity...
 //                                    startActivity(new Intent(RegistrationView.this,
 //                                            ContentListView.class));
                                 }
@@ -153,64 +173,59 @@ public class RegistrationView extends AppCompatActivity {
         });
     }
 
+    //This method returns bitmap image into Base64 string format...
+    public String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+
+    //Code to crop and set image to image view...
     public void onRegImageBtnClicked(View view) {
+        //Code to select only images from gallery...
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_PICK);
-        // code for crop image
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 0);
-        intent.putExtra("aspectY", 0);
-        intent.putExtra("outputX", 200);
-        intent.putExtra("outputY", 150);
-
-        try {
-            intent.putExtra("return-data", true);
-            startActivityForResult(Intent.createChooser(intent, "select picture"), 1);
-        }
-        catch (ActivityNotFoundException e) {
-            e.printStackTrace();
-        }
+        startActivityForResult(Intent.createChooser(intent, "Complete action using"), 1);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK)
-        {
-            if(requestCode == 1)
-            {
-                Bundle extras = data.getExtras();
-
-                String  uri = data.toString();
-
-                if(uri != null)
-                    Log.e("URI",uri);
-                else
-                    Log.e("Uri is null","null");
-                if(extras != null)
-                {
-                    Bitmap photo = extras.getParcelable("data");
-                    mProfilePic.setImageBitmap(photo);
-                }
-            }
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+            mImagePath = getPath(selectedImageUri);
+            mBitmap = BitmapFactory.decodeFile(mImagePath);
+            mProfilePic.setImageBitmap(mBitmap);
         }
+    }
+
+    //Returns actual path of an image...
+    public String getPath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 
     //AsyncTask call to get response and print that response from server...
-    class RegistrationAsync extends AsyncTask<String,String,String>{
+    class RegistrationAsync extends AsyncTask<String, String, String> {
 
         String mResponse;
+
         @Override
         protected String doInBackground(String... params) {
             //Call method and get response from server...
-            mResponse= mRegistrationVMHandler.setUserData(params[0], params[1]);
+            mResponse = mRegistrationVMHandler.setUserData(params[0], params[1],
+                    params[2],params[3]);
             return mResponse;
         }
 
         @Override
         protected void onPostExecute(String s) {
-
             super.onPostExecute(s);
-            Toast.makeText(RegistrationView.this, ""+mResponse, Toast.LENGTH_SHORT)
+            Toast.makeText(RegistrationView.this, "" + mResponse, Toast.LENGTH_SHORT)
                     .show();
         }
     }

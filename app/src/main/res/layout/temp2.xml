@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="7dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/msg2"
+        android:paddingTop="20dp"
+        android:paddingLeft="@dimen/item_touch_helper_max_drag_scroll_per_frame"
+        android:elevation="7dp"
+        android:textColor="@color/textColorPrimary"
+        android:id="@+id/Message1" />
+</LinearLayout>

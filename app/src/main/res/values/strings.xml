@@ -4,6 +4,8 @@
     <string name="MainTitle">MainTitle</string>
     <string name="name">Name</string>
     <string name="message3">Message</string>
+    <string name="msg1">Please confirm your country code and enter mobile number</string>
+    <string name="msg2">ShoppingPad app will send a one time SMS message to verify your phone number.</string>
 
     <string-array name="country">
         <item>India</item>
