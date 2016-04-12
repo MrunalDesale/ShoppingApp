@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 
 /**
  * Created by bridgelabz3 on 22/3/16.
@@ -19,39 +18,37 @@ import java.net.URLEncoder;
  */
 public class RegistrationServiceHandler {
 
-    URL mUrl,mProfilePicUrl;
-    String mResponse = "",response1 = "";
+    URL mUrl;
+    String mResponse = "";
     String mPhoneNo,mName;
 
-    public String postData(String phno,String name) throws FileNotFoundException {
+    public String postData(String phno,String name,String encodedImage) throws FileNotFoundException {
 
         mPhoneNo = "+91-"+phno;
         mName = name;
-        String data;
         StringBuilder buffer = new StringBuilder("");
         try {
 
-            //Prepare data passed to server...
-            data = URLEncoder.encode("phone_no", "UTF-8") + "=" + URLEncoder
-                    .encode(mPhoneNo, "UTF-8");
-            data+="&"+URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder
-                    .encode(mName, "UTF-8");
-
             //Url on which data is to be posted...
-            mUrl = new URL("http://54.86.64.100:3000/api/v1/user/mobile/"+
-                    mPhoneNo+"/"+mName);
+            mUrl = new URL("http://54.86.64.100:3000/api/v1/test/postdata/"+mPhoneNo+"/"+mName);
 
             OutputStreamWriter outputStream;
 
             //Establish connection to url...
             HttpURLConnection urlConnection = (HttpURLConnection) mUrl.openConnection();
             urlConnection.setDoOutput(true);
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoInput(true);
+            urlConnection.setRequestProperty("Connection", "Keep-Alive");
+            urlConnection.setRequestProperty("Cache-Control", "no-cache");
+            urlConnection.setRequestProperty("User-agent", "mozilla");
+            urlConnection.setRequestProperty("Content-Type", "image/jpeg");
 
             //get outputStream to write data to url...
             outputStream = new OutputStreamWriter(urlConnection.getOutputStream());
 
             //Write data to url...
-            outputStream.write(data);
+            outputStream.write(encodedImage);
             outputStream.flush();
 
             //Code to fetch response from url...
@@ -78,57 +75,5 @@ public class RegistrationServiceHandler {
             e.printStackTrace();
         }
         return mResponse;
-    }
-
-    private String postProfilePic(String imagePath, String encodedImage) {
-
-        //Prepare data passed to server...
-        try {
-
-            //Url on which data is to be posted...
-            mProfilePicUrl = new URL("http://54.86.64.100:3000/api/v1/test/postdata");
-
-            //Establish connection to url...
-            HttpURLConnection urlConnection = (HttpURLConnection) mProfilePicUrl.openConnection();
-
-            urlConnection.setDoOutput(true);
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setDoInput(true);
-
-            //Add properties to the request header...
-            urlConnection.setRequestProperty("Connection", "Keep-Alive");
-            urlConnection.setRequestProperty("Cache-Control", "no-cache");
-            urlConnection.setRequestProperty("Content-Type", "image/jpeg");
-
-            //Write encoded image to outputstream...
-            OutputStreamWriter os = new OutputStreamWriter(urlConnection.getOutputStream());
-            os.write(String.valueOf(encodedImage));
-            os.flush();
-
-            //Get response from server...
-            InputStream in = urlConnection.getInputStream();
-            BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(in));
-            String line;
-            StringBuilder stringBuilder = new StringBuilder();
-
-            //Read response...
-            while ((line = responseStreamReader.readLine()) != null)
-                stringBuilder.append(line).append("\n");
-            responseStreamReader.close();
-            response1 = stringBuilder.toString();
-
-            System.out.println(response1);
-
-            //Close connection...
-            os.close();
-            urlConnection.disconnect();
-
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-        //Return server response...
-        return response1;
     }
 }

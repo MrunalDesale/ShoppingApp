@@ -25,10 +25,10 @@ public class RegistrationViewModelHandler {
     String mFileName;
     Bitmap mBitmap;
 
-    public String setUserData(String phno, String name,String fileName,String encodedImage){
+    public String setUserData(String phno, String name,String encodedImage){
         mContentListController=new ContentListController();
         String response;
-        response=mContentListController.setUserInfo(phno,name,fileName,encodedImage);
+        response=mContentListController.setUserInfo(phno,name,encodedImage);
         return response;
     }
 

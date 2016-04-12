@@ -13,7 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,16 +22,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.internal.http.multipart.MultipartEntity;
 import com.shoppingpad.R;
 import com.shoppingpad.databinding.Temp1Binding;
 import com.shoppingpad.util.VerifyNumberFormat;
 import com.shoppingpad.viewmodel.RegistrationViewModelHandler;
-
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.params.HttpConnectionParams;
-
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by bridgelabz3 on 21/3/16.
@@ -55,7 +54,7 @@ public class RegistrationView extends AppCompatActivity {
     RegistrationViewModelHandler mRegistrationVMHandler;
     VerifyNumberFormat mVerifyNumberFormat;
     Bitmap mBitmap;
-    private String mEncodedImage;
+    private byte[] mEncodedImage;
 
 
     //Returns instance of this class...
@@ -70,9 +69,6 @@ public class RegistrationView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Create binding object...
-//        final RegistrationBinding registrationBinding = DataBindingUtil.setContentView(
-//                this, R.layout.registration);
-
         final Temp1Binding temp1Binding = DataBindingUtil.setContentView(this,
                 R.layout.temp1);
 
@@ -102,7 +98,6 @@ public class RegistrationView extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
                 mVerifyNumberFormat = new VerifyNumberFormat();
                 //Get mobile number from EditText...
                 no = String.valueOf(mPhoneNumber.getText());
@@ -154,16 +149,12 @@ public class RegistrationView extends AppCompatActivity {
                                     temp1Binding.setUser(user);
 
                                     //Get encoded image...
-                                    mEncodedImage=getStringImage(mBitmap);
+                                    mEncodedImage = getStringImage(mImagePath);
 
                                     //Call async task...
                                     new RegistrationAsync().execute(user.
                                                     getmMobileNo(), user.getmUserName(),
-                                            mImagePath, mEncodedImage);
-
-                                    //Comment to start next activity...
-//                                    startActivity(new Intent(RegistrationView.this,
-//                                            ContentListView.class));
+                                            String.valueOf(mEncodedImage));
                                 }
                             });
                         }
@@ -173,12 +164,28 @@ public class RegistrationView extends AppCompatActivity {
         });
     }
 
-    //This method returns bitmap image into Base64 string format...
-    public String getStringImage(Bitmap bmp){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    //This method returns image file into bytes format...
+    public byte[] getStringImage(String mImagePath){
+
+        //Prepare file to be converted...
+        File file = new File(mImagePath);
+        byte[] bytes = new byte[1024*8];
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+            int bytesRead =0;
+
+            //Read all bytes until inputStream gets -1
+            while ((bytesRead = inputStream.read(bytes)) != -1) {
+                bos.write(bytes, 0, bytesRead);
+                Log.e("reading", "" + bytes);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bytes;
     }
 
     //Code to crop and set image to image view...
@@ -218,7 +225,7 @@ public class RegistrationView extends AppCompatActivity {
         protected String doInBackground(String... params) {
             //Call method and get response from server...
             mResponse = mRegistrationVMHandler.setUserData(params[0], params[1],
-                    params[2],params[3]);
+                    params[2]);
             return mResponse;
         }
 
@@ -227,6 +234,9 @@ public class RegistrationView extends AppCompatActivity {
             super.onPostExecute(s);
             Toast.makeText(RegistrationView.this, "" + mResponse, Toast.LENGTH_SHORT)
                     .show();
+            //Comment to start next activity...
+            startActivity(new Intent(RegistrationView.this,
+                    ContentListView.class));
         }
     }
 }

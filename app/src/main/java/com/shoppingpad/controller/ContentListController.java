@@ -74,13 +74,13 @@ public class ContentListController {
 
     //This method pass username and mob number to Service handler and get response
     // from server
-    public String setUserInfo(String phno,String name,String fileName,String encodedImage){
+    public String setUserInfo(String phno,String name,String encodedImage){
         String response=null;
         try {
 
             //Call post method to server...
             mRegistrationServiceHandler=new RegistrationServiceHandler();
-            response= mRegistrationServiceHandler.postData(phno, name);
+            response= mRegistrationServiceHandler.postData(phno, name,encodedImage);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
